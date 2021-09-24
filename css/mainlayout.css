@@ -21,6 +21,12 @@ body {
   padding: 10px;
 }
 
+.header-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .nav-bar {
   display: flex;
   flex-direction: row;
@@ -62,20 +68,23 @@ body {
 }
 
 .checkout-cart:hover {
-  background-color: skyblue;
+  background-color: #e9a512;
 }
 
 .divider {
   width: 100%;
   height: 50px;
   background-color: rgb(26, 26, 26);
+  border-top: 1px solid #333;
 }
 
 .footer {
-  height: 40px;
+  min-height: 80px;
   bottom: 0;
   left: 0;
   width: 100%;
   background-color: #1b1b1b;
   color: rgb(255, 255, 255);
+  padding: 20px;
+  border-top: 1px solid #333;
 }
