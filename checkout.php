@@ -74,7 +74,7 @@
                 </form>
              </div>
         </div>
-        <div class="footer">footer</div>
+        <div class="footer">&copy;2021 EECinema Pte Ltd. All rights reserved.</div>
         
     </body>
 

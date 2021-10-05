@@ -56,7 +56,7 @@ body {
 
 .checkout-cart {
   border-radius: 10px;
-  background-color: rgb(167, 167, 167);
+  background-color: #e9a512;
   padding: 10px 20px;
   margin: 0 20px;
 }
@@ -68,7 +68,7 @@ body {
 }
 
 .checkout-cart:hover {
-  background-color: #e9a512;
+  background-color: rgb(167, 167, 167);
 }
 
 .divider {
@@ -87,4 +87,8 @@ body {
   color: rgb(255, 255, 255);
   padding: 20px;
   border-top: 1px solid #333;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }

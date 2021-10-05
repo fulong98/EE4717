@@ -101,4 +101,26 @@
 .movie-container {
   min-height: 500px;
   background-color: rgb(36, 36, 36);
+  padding: 20px;
+}
+
+.movie-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.movie {
+  width: 300;
+}
+
+.movie-name {
+  font-size: 1.5em;
+  margin: 20px 0px;
+}
+
+.movie-coming-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
