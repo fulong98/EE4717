@@ -24,7 +24,7 @@ if(!empty($_GET["action"])){
         <title>Shopping Cart</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/mainlayout.css" />
-        <link rel="stylesheet" href="css/home.css" />
+        <link rel="stylesheet" href="css/cart.css" />
     </head>
     <body>
         <div class="header">
@@ -49,7 +49,8 @@ if(!empty($_GET["action"])){
             </div>
         </div>
         </div>
-        <div style='height:800px;margin-top:100px;'>
+        <div class="divider"></div>
+        <div class="cart-container">
             <?php session_start();
                 if (!isset($_SESSION['cart'])){
                     $_SESSION['cart'] = array();
@@ -60,20 +61,18 @@ if(!empty($_GET["action"])){
                     }
                     
                 }
-                
-                
+
              ?>
-             <div id='cart-container'>
+             <div class="checkout-cart-container">
                 <h1>Shopping Cart</h1>
                 <?php 
                 if (isset($_SESSION['cart']) and count($_SESSION['cart'])>0){
                     echo "<table border='1' cellpadding='10' cellspacing='2'>";
-                    echo "<tr><td></td><td>Movie</td><td>Booking Details</td></tr>";
+                    echo "<tr><th></th><td>Movie</td><td>Booking Details</td></tr>";
                     $ticket_num = 0;
                     foreach($_SESSION['cart'] as $i=>$row){
-                        echo "<br>";
                         echo "<tr>";
-                        echo "<td><a href='cart.php?action=remove&idx=$i'><img src='images/icon-delete.png' alt='Remove Item' /></a></td>";
+                        echo "<th><a href='cart.php?action=remove&idx=$i'><img src='images/icon-delete.png' alt='Remove Item' /></a></th>";
                         echo "<td>".$row["movie"]."</td>";
                         echo "<td>".'<span>Date: '.$row["date"].'</span><br>'.
                         '<span>Time: '.$row['time'].'</span><br> '.
@@ -81,11 +80,13 @@ if(!empty($_GET["action"])){
                         '<span>Selected Seat: '.$row['selected_seats']."</span></td>";
                         $ticket_num +=count(explode(",",$row['selected_seats']))-1;
                     }
-                    echo "<tr><td></td><td>Total Price:</td><td>".($ticket_num*10)."</td></tr>";
+                    echo "<tr><th></th><td>Total Price:</td><td>$ ".($ticket_num*10).".00</td></tr>";
                     echo "</table>";
                 ?>
-                <input type="button" onClick="parent.location='checkout.php'" value="Checkout"><br>
-                <button><a id="btnEmpty" href="cart.php?action=empty">Empty Cart</a></button>
+                <div class="button-row">
+                    <button class="btn-empty"><a id="btnEmpty" href="cart.php?action=empty">Empty Cart</a></button>
+                    <input class="checkout-cart" type="button" onClick="parent.location='checkout.php'" value="Checkout"><br>
+                </div>
                 <?php } 
                 else{
                     echo "<div>Your Cart is Empty</div>";

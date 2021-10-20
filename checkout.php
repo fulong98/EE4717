@@ -3,7 +3,7 @@
         <title>Shopping Cart</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/mainlayout.css" />
-        <link rel="stylesheet" href="css/home.css" />
+        <link rel="stylesheet" href="css/checkout.css" />
     </head>
     <body>
         <div class="header">
@@ -29,7 +29,7 @@
         </div>
         </div>
         <div class="divider"></div>
-        <div style='height:800px;margin-top:100px;'>
+        <div class="cart-container">
             <?php session_start();
                 if (!isset($_SESSION['cart'])){
                     $_SESSION['cart'] = array();
@@ -42,12 +42,12 @@
                 }
                 
              ?>
-             <div id='cart-container'>
+             <div class="confirm-container">
                 <h1>Confirm Your Purchase</h1>
                 <?php 
                 session_start();
                 echo "<table border='1'>";
-                echo "<tr><td>Movie</td><td>Booking Details</td></tr>";
+                echo "<tr><th>Movie</th><th>Booking Details</th></tr>";
                 $ticket_num = 0;
                 foreach($_SESSION['cart'] as $i=>$row){
                     echo "<br>";
@@ -59,18 +59,18 @@
                     '<span>Selected Seat: '.$row['selected_seats']."</span></td>";
                     $ticket_num +=count(explode(",",$row['selected_seats']))-1;
                 }
-                echo "<tr><td>Total Price:</td><td>".($ticket_num*10)."</td></tr>";
+                echo "<tr><td>Total Price:</td><td>$ ".($ticket_num*10).".00</td></tr>";
                 echo "</table>";
                 ?>
                 <form action="php/update_seating_plan.php" method="post">
-                    <table>
-                        Name:<input type='text' name='name' required><br>
-                        Email:<input type='email' name='email' required><br>
-                        Phone:<input type='text' name='phone' required><br>
-                        Billing Address:<input type='text'  name='address' required><br>
-                        Total Amount: <?php echo ($ticket_num*10);?>
+                <h2>Your Billing Details</h2>
+                    <table class="form-table">
+                        <tr><th>Name:</th><td><input type='text' name='name' required></td></tr>
+                        <tr><th>Email:</th><td><input type='email' name='email' required></td></tr>
+                        <tr><th>Phone:</th><td><input type='text' name='phone' required></td></tr>
+                        <tr><th>Billing Address:</th><td><input type='text'  name='address' required></td></tr>
                     </table>
-                    <input type="submit" value='Confirm'>
+                    <input class="confirm-purchase" type="submit" value='Confirm'>
                 </form>
              </div>
         </div>
