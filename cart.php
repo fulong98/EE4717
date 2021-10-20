@@ -85,7 +85,7 @@ if(!empty($_GET["action"])){
                 ?>
                 <div class="button-row">
                     <button class="btn-empty"><a id="btnEmpty" href="cart.php?action=empty">Empty Cart</a></button>
-                    <input class="checkout-cart" type="button" onClick="parent.location='checkout.php'" value="Checkout"><br>
+                    <input class="checkout" type="button" onClick="parent.location='checkout.php'" value="Checkout"><br>
                 </div>
                 <?php } 
                 else{
