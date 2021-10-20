@@ -21,7 +21,7 @@
             <a href="index.php" class="active">Movies</a>
           </div>
           <div class="nav-menu-item">
-            <a href="showtimes.html">Showtimes</a>
+            <a href="showtimes.php">Showtimes</a>
           </div>
           <div class="checkout-cart">
             <a href="cart.php">Checkout Cart</a>
@@ -83,7 +83,7 @@
           $num_results = $result->num_rows;
 
           // echo "<p>Number of movies found: ".$num_results."</p>";
-          echo "<h1>Available Now</h1>";
+          echo "<h1 class='text-header'>Available Now</h1>";
           $j = 0;
           $current_date = date("Y-m-d");
           for ($i=0; $i <$num_results; $i++) {
@@ -114,7 +114,7 @@
           $result = $db->query($query);
 
           $num_results = $result->num_rows;
-          echo "<h1>Coming Soon</h1>";
+          echo "<h1 class='text-header'>Coming Soon</h1>";
           $j = 0;
           $current_date = date("Y-m-d");
           for ($i=0; $i <$num_results; $i++) {

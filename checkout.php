@@ -20,7 +20,7 @@
                 <a href="index.php" class="active">Movies</a>
             </div>
             <div class="nav-menu-item">
-                <a href="showtimes.html">Showtimes</a>
+                <a href="showtimes.php">Showtimes</a>
             </div>
             <div class="checkout-cart">
                 <a href="cart.php">Checkout Cart</a>
@@ -28,6 +28,7 @@
             </div>
         </div>
         </div>
+        <div class="divider"></div>
         <div style='height:800px;margin-top:100px;'>
             <?php session_start();
                 if (!isset($_SESSION['cart'])){
@@ -42,10 +43,9 @@
                 
              ?>
              <div id='cart-container'>
-                <h1>Shopping Cart</h1>
+                <h1>Confirm Your Purchase</h1>
                 <?php 
                 session_start();
-                var_dump($_GET);
                 echo "<table border='1'>";
                 echo "<tr><td>Movie</td><td>Booking Details</td></tr>";
                 $ticket_num = 0;

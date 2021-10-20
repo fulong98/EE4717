@@ -21,7 +21,6 @@ if (isset($_POST) and count($_POST)>0){
     <head>
         <title><?php echo $_GET['id']?> </title>
         <link rel="stylesheet" href="css/mainlayout.css" />
-
         <link rel="stylesheet" href="css/view.css" />
     </head>
     <body>
@@ -47,25 +46,51 @@ if (isset($_POST) and count($_POST)>0){
             </div>
         </div>
         </div>
-        <div>
+        <div class="divider"></div>
+        <div class="page-container">
         <?php 
-
             $query = "select * from movies WHERE name='{$_GET['id']}'";
             $result = $db->query($query);
             $num_results = $result->num_rows;
             for ($i=0; $i <$num_results; $i++) {
                 $row = $result->fetch_assoc();
-                echo "<p> Movie: ";
-                echo htmlspecialchars(stripslashes($row['name']))."</p>";
-                echo "<p>".$row["details"];
-                echo '<br /><img src='.stripslashes($row["pic_url"]).' height=400 width=300>';
-                $movie_name=  $row['name'];  
+                $movie_details = json_decode($row["details"]);
+                $movie_name=  $row['name'];
             }
         ?>
+        
+        <div class="movie-details-container">
+            <div class="image-container">
+                <?php echo '<br /><img src='.stripslashes($row["pic_url"]).' width=100%; height=auto;>';?>
+            </div>
+            <div class="movie-details">
+                <h1 class="movie-title"><?php echo $movie_name?></h1>
+                <table>
+                    <tr>
+                        <th>Genre:</th>
+                        <td><?php echo $movie_details->Genre?></td>
+                    </tr>
+                    <tr>
+                        <th>Runtime:</th>
+                        <td><?php 
+                        
+                        echo $movie_details->{'Running Time'}?></td>
+                    </tr>
+                    <tr>
+                        <th>Directed By:</th>
+                        <td><?php echo $movie_details->Director?></td>
+                    </tr>
+                    <tr>
+                        <th>Cast:</th>
+                        <td><?php echo $movie_details->Cast?></td>
+                    </tr>
+                </table>
+        <!-- Ticket Booking -->
+        <h3>Book Movie Tickets</h3>
             <div class='form'>
                 <form action='view.php?id=<?php echo $movie_name;?>' method='post'>
                     <input name='movie' id='movie' value=<?php echo $movie_name;?> style='display:None;'>
-                    <input type="date" name="date" required>
+                    <input  type="date" name="date" required style="padding: 10px;">
                     <select name="time" id="time" required>
                         <option value="1200">12:00pm</option>
                         <option value="1400">2:00pm</option>
@@ -94,9 +119,7 @@ if (isset($_POST) and count($_POST)>0){
                         }
                         echo "</select>";
                     ?>
-                
-        
-            <div class="movie-container">
+            <div class="ticket-booking-container">
                 <ul class="showcase">
                 <li>
                     <div class="seat"></div>
@@ -113,9 +136,19 @@ if (isset($_POST) and count($_POST)>0){
                 </ul>
 
                 <div class="seat-container">
-                <div class="screen"></div>
-
+                <div class="screen">Screen</div>
+                <div class="row" style="padding-left: 17px;">
+                    <div class="seat-alphabet">A</div>
+                    <div class="seat-alphabet">B</div>
+                    <div class="seat-alphabet">C</div>
+                    <div class="seat-alphabet">D</div>
+                    <div class="seat-alphabet">E</div>
+                    <div class="seat-alphabet">F</div>
+                    <div class="seat-alphabet">G</div>
+                    <div class="seat-alphabet">H</div>
+                </div>
                 <div class="row">
+                    1 &nbsp;
                     <div class="seat" id='A1'></div>
                     <div class="seat" id='A2'></div>
                     <div class="seat" id='A3'></div>
@@ -127,6 +160,7 @@ if (isset($_POST) and count($_POST)>0){
                 </div>
 
                 <div class="row">
+                    2 &nbsp;
                     <div class="seat" id='B1'></div>
                     <div class="seat" id='B2'></div>
                     <div class="seat occupied" id='B3'></div>
@@ -138,6 +172,7 @@ if (isset($_POST) and count($_POST)>0){
                 </div>
 
                 <div class="row">
+                    3 &nbsp;
                     <div class="seat" id='C1'></div>
                     <div class="seat" id='C2'></div>
                     <div class="seat" id='C3'></div>
@@ -149,6 +184,7 @@ if (isset($_POST) and count($_POST)>0){
                 </div>
 
                 <div class="row">
+                    4 &nbsp;
                     <div class="seat" id='D1'></div>
                     <div class="seat" id='D2'></div>
                     <div class="seat" id='D3'></div>
@@ -160,6 +196,7 @@ if (isset($_POST) and count($_POST)>0){
                 </div>
 
                 <div class="row">
+                    5 &nbsp;
                     <div class="seat" id='E1'></div>
                     <div class="seat" id='E2'></div>
                     <div class="seat" id='E3'></div>
@@ -171,6 +208,7 @@ if (isset($_POST) and count($_POST)>0){
                 </div>
 
                 <div class="row">
+                    6 &nbsp;
                     <div class="seat" id='F1'></div>
                     <div class="seat" id='F2'></div>
                     <div class="seat" id='F3'></div>
@@ -186,15 +224,19 @@ if (isset($_POST) and count($_POST)>0){
                 You have selected <span id="count">0</span> seats for a price of $<span
                     id="price"
                     >0</span
-                ><br>Selected Seats:<input id='selected_seats' name='selected_seats' required>
-                
+                ><br><br/>Selected Seats: <input id='selected_seats' name='selected_seats' required readonly >
+                <br/>
+                <input class="add-cart" type='Submit' value="Add To Cart">
                 </p>
 
                 <script src="js/script.js" type="text/javascript"></script>
-                <input type='Submit' value="Add To Cart">
+                
             </div>
             </form>
             </div>
-            <div class="footer">&copy;2021 EECinema Pte Ltd. All rights reserved.</div>
+        </div>
+          </div>
+        </div>
+     <div class="footer">&copy;2021 EECinema Pte Ltd. All rights reserved.</div>
     </body>
 </html>

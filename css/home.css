@@ -104,7 +104,12 @@
   padding: 20px;
 }
 
+.text-header {
+  padding-left: 50px;
+}
+
 .movie-row {
+  margin: 50px auto;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -120,6 +125,7 @@
 }
 
 .movie-coming-row {
+  margin: 50px auto;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
