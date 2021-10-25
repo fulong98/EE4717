@@ -22,7 +22,7 @@ VALUES ('".$_GET['movie']."','".$_GET['starting_date']."','".$_GET['ending_date'
 $res = mysqli_query($db, $query);
 if($res) {
     echo json_encode($res);
-    header("Location: http://192.168.56.2/f32ee/project/insert_movie.html");
+    header("Location: http://192.168.56.2/f32ee/Exercises/EE4717/insert_movie.html");
     exit();
     } else {
     echo "Error: " . $sql . "" . mysqli_error($dbCon);
