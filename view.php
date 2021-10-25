@@ -38,7 +38,7 @@ if (isset($_POST) and count($_POST)>0){
                 <a href="index.php" class="active">Movies</a>
             </div>
             <div class="nav-menu-item">
-                <a href="showtimes.html">Showtimes</a>
+                <a href="showtimes.php">Showtimes</a>
             </div>
             <div class="checkout-cart">
                 <a href="cart.php">Checkout Cart</a>

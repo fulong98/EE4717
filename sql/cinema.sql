@@ -1,6 +1,6 @@
 create table movies
 ( id int unsigned not null auto_increment primary key,
-  name char(50) not null,
+  name char(100) not null,
   starting_date date not null,
   ending_date date not null,
   location char(30) not null,
