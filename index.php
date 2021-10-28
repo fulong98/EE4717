@@ -91,7 +91,7 @@
           $current_date = date("Y-m-d");
           for ($i=0; $i <$num_results; $i++) {
             $row = $result->fetch_assoc();
-            if ($row['starting_date']<$current_date){
+            if ($row['starting_date']<=$current_date){
               if ($j%3==0){
                   if ($j!=0){
                     echo "</div>";
