@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Insert Movie</title></head>
+    <link rel="stylesheet" href="../css/mainlayout.css" />
+    <body>
+        <div class="header">
+            <div class="container">
+
+                <div class="nav-bar">
+                <div class="nav-menu-item" class="active">
+                    <a href="insert_movie.html" class="active">Insert Movie</a>
+                </div>
+                <div class="nav-menu-item">
+                    <a href="index.php">Movie Detail</a>
+                </div>
+                
+                </div>
+            </div>
+        <form action='../php/insert_movie.php' method='GET'>
+            <table>
+                <tr><td>Movie</td><td><input type="text" required name='movie'></tr>
+                <tr><td>Starting_Sate</td><td><input type="date" required name='starting_date'></tr>
+                <tr><td>ending_date</td><td><input type="date" required name='ending_date'></tr>
+                <tr><td>Location</td><td><select name="locations[]" id="locations" multiple> 
+                    <option value="Funan">Funan</option>
+                    <option value="Bedok">Bedok</option>
+                    <option value="Boon Lay">Boon Lay</option>
+                    <option value="Vivocity">Vivocity</option>
+                  </select></tr>
+                <tr><td>Cast</td><td><input type="text" required name='cast'></tr>
+                <tr><td>Director</td><td><input type="text" required name='director'></tr>
+                <tr><td>Genre</td><td><input type="text" required name='genre'></tr>
+                <tr><td>Running Time</td><td><input type="text" required name='running_time'></tr>
+                <tr><td>Photo URL</td><td><input type="text" required name='pic_url'></tr>
+                <tr><td>Trailer URL</td><td><input type="text" required name='trailer_url'></tr>
+            </table>
+            <input type="submit" value="INSERT">
+        </form>
+    </body>
+</html>
