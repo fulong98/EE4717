@@ -19,6 +19,9 @@ if(!empty($_GET["action"])){
     }
     
 }
+if (isset($_GET["Message"])){
+    echo '<script type="text/javascript">alert("'.$_GET['Message'].'");</script>';
+}
 ?>
 <html>
     <head>
