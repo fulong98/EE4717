@@ -82,7 +82,7 @@
                     echo ("mail sent to : ".$to);
                     echo "<script>alert('Booked successfully! Please check your email!')</script>";
                     unset($_SESSION["cart"]);
-                    // header('Location:http://192.168.56.2/f32ee/EE4717/index.php');
+                    header('Location:http://192.168.56.2/f32ee/EE4717/cart.php?Message='.urlencode('Booked successfully! Please check your email!'));
                   } else {
                     echo "Error updating record: " . $conn->error;
                   }
