@@ -1,3 +1,6 @@
+<?php
+  require_once('php/db.php');
+?>
 <html>
 <head>
   <title>Cinema</title>
@@ -24,7 +27,7 @@
             <a href="showtimes.php">Showtimes</a>
           </div>
           <div class="checkout-cart">
-            <a href="cart.php">Checkout Cart</a>
+            <a href="cart.php">Checkout Cart <?php echo (!empty($_SESSION['cart'])? count($_SESSION['cart']):'');?></a>
           </div>
         </div>
       </div>
