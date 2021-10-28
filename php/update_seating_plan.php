@@ -63,7 +63,7 @@
                     echo $seating_plan;
                     $movie_details = $row['movie'].'_'.$row['date'].'_'.$row['time'].'_'.$row['location'].'_'.$seating_plan;
                     $sql = "INSERT INTO confirmation_details (name, email, phone,address,order_id,price,movie_details)
-                    VALUES ('".$row['movie']."','".$_POST['email']."','".$_POST['phone']."','".$_POST['address']."','abc','".$price."','".$movie_details."');";
+                    VALUES ('".$_POST['name']."','".$_POST['email']."','".$_POST['phone']."','".$_POST['address']."','abc','".$price."','".$movie_details."');";
                     echo $sql;
                     echo $sql;
                     if ($db->query($sql) === TRUE) {
@@ -73,7 +73,10 @@
                     }
                     $to      = 'f32ee@localhost';
                     $subject = 'EEE Cinema Booking Detail';
-                    $message = $movie_details;
+                    $message = 'Dear "'.$_POST['name'].'", 
+                    Booked successfully!
+                    Total payment: "'.$price.'"
+                    "'.$movie_details.'"';
                     $headers = 'From: f32ee@localhost' . "\r\n" .
                         'Reply-To: f32ee@localhost' . "\r\n" .
                         'X-Mailer: PHP/' . phpversion();
