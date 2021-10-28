@@ -133,7 +133,6 @@
               echo "<div class='movie'>";
               $movie_detail_dict = json_decode(stripslashes($row['details']));
               echo '
-              <a href="view.php?id='.$row["name"].'"">
               <img src='.stripslashes($row["pic_url"]).' height=400 width=300>
               </a>';
               echo "<p class='movie-name'> Movie: ";
