@@ -38,7 +38,7 @@
       <div class="showtimes-container">
         <h1>Movies Showtimes</h1>
         <p>Check out the different movie showtimes today!</p>
-        <select id="mylist" onchange="myFunction()" class='form-control' style="padding: 10px; width: 40%; margin-bottom: 40px;">
+        <select id="mylist" onchange="filter_movie()" class='form-control' style="padding: 10px; width: 40%; margin-bottom: 40px;">
         <option value="" selected disabled hidden>Filter By Movie Names</option>
         <?php
           
@@ -82,9 +82,7 @@
               echo $row['name']."</p></a>";
               echo "<td>";
               $location = explode(';',$row['location']);
-              for ($k=0; $k <= count($location); $k++) {
-                echo $location[$k];
-              }
+              echo implode(", ",$location);
               echo "</td><td><p>12:00pm, 2:00pm, 4:00pm, 6:00pm, 8:00pm, 10:00pm,</p></td></tr>";
               $j = $j +1;
             }
