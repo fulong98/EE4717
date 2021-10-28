@@ -1,43 +1,40 @@
 <?php 
-session_start();
-require_once('php/db.php');
+    session_start();
+    require_once('php/db.php');
 
-if (!isset($_SESSION['cart'])){
-    $_SESSION['cart'] = array();
-    
-}
-$movie = $_REQUEST['id'];
-$time = $_REQUEST['time'];
-$date = $_REQUEST['date'];
-$location = $_REQUEST['location'];
-if (isset($_REQUEST['location'])){
-    // fetch seating map from database for seat map showing
-    $query = "select * from seatingPlan WHERE movie='{$movie}' AND date='{$date}' AND time='{$time}' AND location='{$location}'";
-    $result = $db->query($query);
-    if ($result->num_rows>0){
-        while($row = $result->fetch_assoc()) {
-            $seatingmap =  $row['seat_map'];
-
-          }
+    if (!isset($_SESSION['cart'])){
+        $_SESSION['cart'] = array();
+        
     }
-    
-}
-if (isset($_POST) and count($_POST)>0){
-    // add ticket to cart
-    $tmp = array('movie'=>$_POST['movie'],'date'=>$_POST['date'],
-    'time'=>$_POST['time'],'location'=>$_POST['location'],
-    'selected_seats'=>$_POST['selected_seats'],'seating_map'=>$seatingmap);
-    // var_dump($_POST);
-    if (strlen($_POST['selected_seats'])>3){
-    array_push($_SESSION['cart'],$tmp);}
-    unset($_POST);
-    unset($tmp);
-    header('Location:http://192.168.56.2/f32ee/EE4717/cart.php');
-    exit;
-}
+    $movie = $_REQUEST['id'];
+    $time = $_REQUEST['time'];
+    $date = $_REQUEST['date'];
+    $location = $_REQUEST['location'];
+    if (isset($_REQUEST['location'])){
+        // fetch seating map from database for seat map showing
+        $query = "select * from seatingPlan WHERE movie='{$movie}' AND date='{$date}' AND time='{$time}' AND location='{$location}'";
+        $result = $db->query($query);
+        if ($result->num_rows>0){
+            while($row = $result->fetch_assoc()) {
+                $seatingmap =  $row['seat_map'];
 
-
-
+            }
+        }
+        
+    }
+    if (isset($_POST) and count($_POST)>0){
+        // add ticket to cart
+        $tmp = array('movie'=>$_POST['movie'],'date'=>$_POST['date'],
+        'time'=>$_POST['time'],'location'=>$_POST['location'],
+        'selected_seats'=>$_POST['selected_seats'],'seating_map'=>$seatingmap);
+        // var_dump($_POST);
+        if (strlen($_POST['selected_seats'])>3){
+        array_push($_SESSION['cart'],$tmp);}
+        unset($_POST);
+        unset($tmp);
+        header('Location:http://192.168.56.2/f32ee/EE4717/cart.php');
+        exit;
+    }
 ?>
 
 <html>
@@ -159,10 +156,9 @@ if (isset($_POST) and count($_POST)>0){
                             }
                             echo "</select>";
                         ?>
-                        <input type='text' value=<?php echo ($seatingmap[0]=='0' ? '0':'occupied'); ?> >
-                        <button onclick='getSeatingPlan()'>Fetch</button>
+                        <button onclick='getSeatingPlan()'>Fetch Seating Map</button>
 
-            <div class="ticket-booking-container">
+            <div class="ticket-booking-container" <?php echo (isset($_REQUEST['location'])?"":'style="display:None";}') ?>>
                 <ul class="showcase">
                 <li>
                     <div class="seat"></div>
