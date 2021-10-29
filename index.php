@@ -130,7 +130,7 @@
               echo '
               <img src='.stripslashes($row["pic_url"]).' height=400 width=300>
               </a>';
-              echo "<p class='movie-name'> Movie: ";
+              echo "<p class='movie-name'>";
               echo htmlspecialchars(stripslashes($row['name']))."</p>";
               echo "</div>";
               
