@@ -31,7 +31,7 @@
         array_push($_SESSION['cart'],$tmp);}
         unset($_POST);
         unset($tmp);
-        header('Location:http://192.168.56.2/f32ee/EE4717/cart.php');
+        header('Location:http://192.168.56.2/f32ee/Exercises/EE4717/cart.php');
         exit;
     }
 ?>

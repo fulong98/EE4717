@@ -34,8 +34,8 @@
             <div class="container">
 
                 <div class="nav-bar">
-                    <div class="nav-menu-item" class="active">
-                        <a href="insert_movie.html" class="active">Insert Movie</a>
+                    <div class="nav-menu-item">
+                        <a href="insert_movie.html">Insert Movie</a>
                     </div>
                 <div class="nav-menu-item">
                     <a href="index.php">Movie Detail</a>

@@ -35,12 +35,7 @@
     <div class="divider"></div>
     <div class="main">
       <div class="slideshow-container">
-        <div class="slideshow-box">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-          placerat ornare velit sit amet pharetra. In ac dictum velit. Phasellus
-          eu magna finibus, semper est eget, pretium felis. Pellentesque vitae
-          vehicula est. Praesent aliquam libero vel placerat dignissim.
-        </div>
+        
         <!-- Full-width images with number and caption text -->
         <div class="mySlides fade">
           <img
