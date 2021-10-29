@@ -16,8 +16,9 @@ echo $_GET['genre']."<br>";
 echo $_GET['running_time']."<br>";
 echo $_GET['pic_url']."<br>";
 echo $_GET['trailer_url']."<br>";
+$detail = '{"Cast":"'.$_GET['cast'].'","Director":"'.$_GET['director'].'","Genre":"'.$_GET['genre'].'","Running Time":"'.$_GET['running_time'].'"}';
 $query = "INSERT INTO movies (name,starting_date,ending_date,location,details,pic_url,trailer_url)
-VALUES ('".$_GET['movie']."','".$_GET['starting_date']."','".$_GET['ending_date']."','".$loc_str."','','".$_GET['pic_url']."','".$_GET['trailer_url']."')";
+VALUES ('".$_GET['movie']."','".$_GET['starting_date']."','".$_GET['ending_date']."','".$loc_str."','".$detail."','".$_GET['pic_url']."','".$_GET['trailer_url']."')";
 
 $period = new DatePeriod(
     new DateTime($_GET['starting_date']),

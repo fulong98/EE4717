@@ -91,7 +91,7 @@
           $current_date = date("Y-m-d");
           for ($i=0; $i <$num_results; $i++) {
             $row = $result->fetch_assoc();
-            if ($row['starting_date']<$current_date){
+            if ($row['starting_date']<=$current_date){
               if ($j%3==0){
                   if ($j!=0){
                     echo "</div>";
@@ -133,7 +133,6 @@
               echo "<div class='movie'>";
               $movie_detail_dict = json_decode(stripslashes($row['details']));
               echo '
-              <a href="view.php?id='.$row["name"].'"">
               <img src='.stripslashes($row["pic_url"]).' height=400 width=300>
               </a>';
               echo "<p class='movie-name'> Movie: ";

@@ -28,7 +28,7 @@ function filter_movie_date($movie_array){
     $movie_coming_soon = [];
     foreach($movie_array as $movie_name => $movie_starting_date) {
         // echo "$movie_name = $movie_starting_date<br>";
-        if ($current_date>$movie_starting_date){
+        if ($current_date>=$movie_starting_date){
             array_push($movie_available_now,$movie_name);
         }
         else{
