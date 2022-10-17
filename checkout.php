@@ -1,3 +1,6 @@
+<?php
+  require_once('php/db.php');
+?>
 <html>
     <head>
         <title>Shopping Cart</title>
@@ -23,14 +26,14 @@
                 <a href="showtimes.php">Showtimes</a>
             </div>
             <div class="checkout-cart">
-                <a href="cart.php">Checkout Cart</a>
+                <a href="cart.php">Checkout Cart <?php echo (!empty($_SESSION['cart'])? count($_SESSION['cart']):'');?></a>
             </div>
             </div>
         </div>
         </div>
         <div class="divider"></div>
         <div class="cart-container">
-            <?php session_start();
+            <?php 
                 if (!isset($_SESSION['cart'])){
                     $_SESSION['cart'] = array();
                 }
@@ -45,7 +48,6 @@
              <div class="confirm-container">
                 <h1>Confirm Your Purchase</h1>
                 <?php 
-                session_start();
                 echo "<table border='1'>";
                 echo "<tr><th>Movie</th><th>Booking Details</th></tr>";
                 $ticket_num = 0;

@@ -1,5 +1,7 @@
 <?php 
-session_start();
+
+require_once('php/db.php');
+
 if(!empty($_GET["action"])){
     switch($_GET["action"]){
         case "remove":
@@ -14,9 +16,13 @@ if(!empty($_GET["action"])){
         break;
         case "empty":
             unset($_SESSION["cart"]);
+            unset($_POST);
         break;
     }
     
+}
+if (isset($_GET["Message"])){
+    echo '<script type="text/javascript">alert("'.$_GET['Message'].'");</script>';
 }
 ?>
 <html>
@@ -44,7 +50,7 @@ if(!empty($_GET["action"])){
                 <a href="showtimes.php">Showtimes</a>
             </div>
             <div class="checkout-cart">
-                <a href="cart.php">Checkout Cart</a>
+                <a href="cart.php">Checkout Cart <?php echo (!empty($_SESSION['cart'])? count($_SESSION['cart']):'');?></a>
             </div>
             </div>
         </div>

@@ -4,20 +4,6 @@
   margin: auto;
 }
 
-.slideshow-box {
-  height: 300px;
-  width: 300px;
-  background-color: rgba(0, 0, 0, 0.856);
-  /* float: left; */
-  z-index: 999;
-  position: absolute;
-  margin-left: 30px;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  padding: 20px;
-}
-
 /* Hide the images by default */
 .mySlides {
   display: none;

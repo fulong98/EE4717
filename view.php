@@ -1,20 +1,39 @@
 <?php 
-session_start();
-require_once('php/db.php');
+    require_once('php/db.php');
 
-if (!isset($_SESSION['cart'])){
-    $_SESSION['cart'] = array();
-}
-if (isset($_POST) and count($_POST)>0){
-    $tmp = array('movie'=>$_POST['movie'],'date'=>$_POST['date'],
-    'time'=>$_POST['time'],'location'=>$_POST['location'],
-    'selected_seats'=>$_POST['selected_seats']);
-    array_push($_SESSION['cart'],$tmp);
-    header("Location: ".$_SERVER['PHP_SELF']."?id={$_GET['id']}");
-    exit;
-}
+    if (!isset($_SESSION['cart'])){
+        $_SESSION['cart'] = array();
+        
+    }
+    $movie = $_REQUEST['id'];
+    $time = $_REQUEST['time'];
+    $date = $_REQUEST['date'];
+    $location = $_REQUEST['location'];
+    if (isset($_REQUEST['location'])){
+        // fetch seating map from database for seat map showing
+        $query = "select * from seatingPlan WHERE movie='{$movie}' AND date='{$date}' AND time='{$time}' AND location='{$location}'";
+        $result = $db->query($query);
+        if ($result->num_rows>0){
+            while($row = $result->fetch_assoc()) {
+                $seatingmap =  $row['seat_map'];
 
-
+            }
+        }
+        
+    }
+    if (isset($_POST) and count($_POST)>0){
+        // add ticket to cart
+        $tmp = array('movie'=>$_POST['movie'],'date'=>$_POST['date'],
+        'time'=>$_POST['time'],'location'=>$_POST['location'],
+        'selected_seats'=>$_POST['selected_seats'],'seating_map'=>$seatingmap);
+        // var_dump($_POST);
+        if (strlen($_POST['selected_seats'])>3){
+        array_push($_SESSION['cart'],$tmp);}
+        unset($_POST);
+        unset($tmp);
+        header('Location:http://192.168.56.2/f32ee/Exercises/EE4717/cart.php');
+        exit;
+    }
 ?>
 
 <html>
@@ -22,6 +41,17 @@ if (isset($_POST) and count($_POST)>0){
         <title><?php echo $_GET['id']?> </title>
         <link rel="stylesheet" href="css/mainlayout.css" />
         <link rel="stylesheet" href="css/view.css" />
+        <script>
+        function getSeatingPlan(){
+            movie = document.getElementById('movie').value;
+            date = document.getElementById('date').value;
+            time = document.getElementById('time').value;
+            var select = document.getElementById('location');
+            var location = select.options[select.selectedIndex].value.trim();
+            const url = 'view.php?id='+movie+'&date='+date+'&time='+time+'&location='+location;
+            window.open(url,"_blank");
+        }
+    </script>
     </head>
     <body>
         <div class="header">
@@ -38,10 +68,10 @@ if (isset($_POST) and count($_POST)>0){
                 <a href="index.php" class="active">Movies</a>
             </div>
             <div class="nav-menu-item">
-                <a href="showtimes.html">Showtimes</a>
+                <a href="showtimes.php">Showtimes</a>
             </div>
             <div class="checkout-cart">
-                <a href="cart.php">Checkout Cart</a>
+                <a href="cart.php">Checkout Cart <?php echo (!empty($_SESSION['cart'])? count($_SESSION['cart']):'');?></a>
             </div>
             </div>
         </div>
@@ -89,37 +119,45 @@ if (isset($_POST) and count($_POST)>0){
         <h3>Book Movie Tickets</h3>
             <div class='form'>
                 <form action='view.php?id=<?php echo $movie_name;?>' method='post'>
-                    <input name='movie' id='movie' value=<?php echo $movie_name;?> style='display:None;'>
-                    <input  type="date" name="date" required style="padding: 10px;">
-                    <select name="time" id="time" required>
-                        <option value="1200">12:00pm</option>
-                        <option value="1400">2:00pm</option>
-                        <option value="1600">4:00pm</option>
-                        <option value="1800">6:00pm</option>
-                        <option value="2000">8:00pm</option>
-                        <option value="2200">10:00pm</option>
-                    </select>
-                    <?php 
-                        $sql = "SELECT location FROM movies WHERE name='".$movie_name."'";
-                        $result = $db->query($sql);
-                        if ($result->num_rows > 0) {
-                        // output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            $locations =  $row['location'];
-                        }}
-                        $locations = explode(';',$locations);
-                        echo "<select name='location' id='location' required>";
-                        foreach($locations as $k=>$v){
-                            
-                            if ($v!=""){
-                                // echo $v;
-                                echo "<option value='{$v}'>{$v}</option>";
+
+                        <input name='movie' id='movie' value=<?php echo $movie_name;?> style='display:None;'>
+                        <input  type="date" name="date" id='date' required style="padding: 10px;" value=<?php echo $date; ?>>
+                        <select name="time" id="time" required>
+                            <option value="1200" <?php echo ($_REQUEST['time']=='1200'?"selected='selected'":"")?>>12:00pm</option>
+                            <option value="1400" <?php echo ($_REQUEST['time']=='1400'?"selected='selected'":"")?>>2:00pm</option>
+                            <option value="1600" <?php echo ($_REQUEST['time']=='1600'?"selected='selected'":"")?>>4:00pm</option>
+                            <option value="1800" <?php echo ($_REQUEST['time']=='1800'?"selected='selected'":"")?>>6:00pm</option>
+                            <option value="2000" <?php echo ($_REQUEST['time']=='2000'?"selected='selected'":"")?>>8:00pm</option>
+                            <option value="2200" <?php echo ($_REQUEST['time']=='2200'?"selected='selected'":"")?>> 10:00pm</option>
+                        </select>
+                        <?php 
+                            $sql = "SELECT location FROM movies WHERE name='".$movie_name."'";
+                            $result = $db->query($sql);
+                            if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $locations =  $row['location'];
+                            }}
+                            $locations = explode(';',$locations);
+                            echo "<select name='location' id='location' required>";
+                            foreach($locations as $k=>$v){
+                                
+                                if ($v!=""){
+                                    $v = trim($v);
+                                    if (isset($_REQUEST['location']) and $v==$_REQUEST['location']){
+                                        echo "<option value='{$v}' selected='selected'>{$v}</option>";
+                                    }
+                                    else{
+                                        echo "<option value='{$v}'>{$v}</option>";
+                                    }
+                                    
+                                }
                             }
-                            
-                        }
-                        echo "</select>";
-                    ?>
-            <div class="ticket-booking-container">
+                            echo "</select>";
+                        ?>
+                        <button onclick='getSeatingPlan()'>Fetch Seating Map</button>
+
+            <div class="ticket-booking-container" <?php echo (isset($_REQUEST['location'])?"":'style="display:None";}') ?>>
                 <ul class="showcase">
                 <li>
                     <div class="seat"></div>
@@ -138,85 +176,86 @@ if (isset($_POST) and count($_POST)>0){
                 <div class="seat-container">
                 <div class="screen">Screen</div>
                 <div class="row" style="padding-left: 17px;">
-                    <div class="seat-alphabet">A</div>
-                    <div class="seat-alphabet">B</div>
-                    <div class="seat-alphabet">C</div>
-                    <div class="seat-alphabet">D</div>
-                    <div class="seat-alphabet">E</div>
-                    <div class="seat-alphabet">F</div>
-                    <div class="seat-alphabet">G</div>
-                    <div class="seat-alphabet">H</div>
+                    <div class="seat-alphabet">1</div>
+                    <div class="seat-alphabet">2</div>
+                    <div class="seat-alphabet">3</div>
+                    <div class="seat-alphabet">4</div>
+                    <div class="seat-alphabet">5</div>
+                    <div class="seat-alphabet">6</div>
+                    <div class="seat-alphabet">7</div>
+                    <div class="seat-alphabet">8</div>
                 </div>
+                
+
                 <div class="row">
-                    1 &nbsp;
-                    <div class="seat" id='A1'></div>
-                    <div class="seat" id='A2'></div>
-                    <div class="seat" id='A3'></div>
-                    <div class="seat" id='A4'></div>
-                    <div class="seat" id='A5'></div>
-                    <div class="seat" id='A6'></div>
-                    <div class="seat" id='A7'></div>
-                    <div class="seat" id='A8'></div>
+                    A &nbsp;
+                    <div class="seat <?php echo ($seatingmap[0]=='0' ? '0':'occupied'); ?>" id='A1'></div>
+                    <div class="seat <?php echo ($seatingmap[1]=='0' ? '0':'occupied'); ?>" id='A2'></div>
+                    <div class="seat <?php echo ($seatingmap[2]=='0' ? '0':'occupied'); ?>" id='A3'></div>
+                    <div class="seat <?php echo ($seatingmap[3]=='0' ? '0':'occupied'); ?>" id='A4'></div>
+                    <div class="seat <?php echo ($seatingmap[4]=='0' ? '0':'occupied'); ?>" id='A5'></div>
+                    <div class="seat <?php echo ($seatingmap[5]=='0' ? '0':'occupied'); ?>" id='A6' ></div>
+                    <div class="seat <?php echo ($seatingmap[6]=='0' ? '0':'occupied'); ?>" id='A7'></div>
+                    <div class="seat <?php echo ($seatingmap[7]=='0' ? '0':'occupied'); ?>" id='A8'></div>
                 </div>
 
                 <div class="row">
-                    2 &nbsp;
-                    <div class="seat" id='B1'></div>
-                    <div class="seat" id='B2'></div>
-                    <div class="seat occupied" id='B3'></div>
-                    <div class="seat occupied" id='B4'></div>
-                    <div class="seat" id='B5'></div>
-                    <div class="seat" id='B6' ></div>
-                    <div class="seat" id='B7'></div>
-                    <div class="seat" id='B8'></div>
+                    B &nbsp;
+                    <div class="seat <?php echo ($seatingmap[8]=='0' ? '0':'occupied'); ?>" id='B1'></div>
+                    <div class="seat <?php echo ($seatingmap[9]=='0' ? '0':'occupied'); ?>" id='B2'></div>
+                    <div class="seat <?php echo ($seatingmap[10]=='0' ? '0':'occupied'); ?>" id='B3'></div>
+                    <div class="seat <?php echo ($seatingmap[11]=='0' ? '0':'occupied'); ?>" id='B4'></div>
+                    <div class="seat <?php echo ($seatingmap[12]=='0' ? '0':'occupied'); ?>" id='B5'></div>
+                    <div class="seat <?php echo ($seatingmap[13]=='0' ? '0':'occupied'); ?>" id='B6'></div>
+                    <div class="seat <?php echo ($seatingmap[14]=='0' ? '0':'occupied'); ?>" id='B7'></div>
+                    <div class="seat <?php echo ($seatingmap[15]=='0' ? '0':'occupied'); ?>" id='B8'></div>
                 </div>
 
                 <div class="row">
-                    3 &nbsp;
-                    <div class="seat" id='C1'></div>
-                    <div class="seat" id='C2'></div>
-                    <div class="seat" id='C3'></div>
-                    <div class="seat" id='C4'></div>
-                    <div class="seat" id='C5'></div>
-                    <div class="seat" id='C6'></div>
-                    <div class="seat occupied" id='C7'></div>
-                    <div class="seat occupied" id='C8'></div>
+                    C &nbsp;
+                    <div class="seat <?php echo ($seatingmap[16]=='0' ? '0':'occupied'); ?>" id='C1'></div>
+                    <div class="seat <?php echo ($seatingmap[17]=='0' ? '0':'occupied'); ?>" id='C2'></div>
+                    <div class="seat <?php echo ($seatingmap[18]=='0' ? '0':'occupied'); ?>" id='C3'></div>
+                    <div class="seat <?php echo ($seatingmap[19]=='0' ? '0':'occupied'); ?>" id='C4'></div>
+                    <div class="seat <?php echo ($seatingmap[20]=='0' ? '0':'occupied'); ?>" id='C5'></div>
+                    <div class="seat <?php echo ($seatingmap[21]=='0' ? '0':'occupied'); ?>" id='C6'></div>
+                    <div class="seat <?php echo ($seatingmap[22]=='0' ? '0':'occupied'); ?>" id='C7'></div>
+                    <div class="seat <?php echo ($seatingmap[23]=='0' ? '0':'occupied'); ?>" id='C8'></div>
                 </div>
 
                 <div class="row">
-                    4 &nbsp;
-                    <div class="seat" id='D1'></div>
-                    <div class="seat" id='D2'></div>
-                    <div class="seat" id='D3'></div>
-                    <div class="seat" id='D4'></div>
-                    <div class="seat" id='D5'></div>
-                    <div class="seat" id='D6'></div>
-                    <div class="seat" id='D7'></div>
-                    <div class="seat" id='D8'></div>
+                    D &nbsp;
+                    <div class="seat <?php echo ($seatingmap[24]=='0' ? '0':'occupied'); ?>" id='D1'></div>
+                    <div class="seat <?php echo ($seatingmap[25]=='0' ? '0':'occupied'); ?>" id='D2'></div>
+                    <div class="seat <?php echo ($seatingmap[26]=='0' ? '0':'occupied'); ?>" id='D3'></div>
+                    <div class="seat <?php echo ($seatingmap[27]=='0' ? '0':'occupied'); ?>" id='D4'></div>
+                    <div class="seat <?php echo ($seatingmap[28]=='0' ? '0':'occupied'); ?>" id='D5'></div>
+                    <div class="seat <?php echo ($seatingmap[29]=='0' ? '0':'occupied'); ?>" id='D6'></div>
+                    <div class="seat <?php echo ($seatingmap[30]=='0' ? '0':'occupied'); ?>" id='D7'></div>
+                    <div class="seat <?php echo ($seatingmap[31]=='0' ? '0':'occupied'); ?>" id='D8'></div>
                 </div>
 
                 <div class="row">
-                    5 &nbsp;
-                    <div class="seat" id='E1'></div>
-                    <div class="seat" id='E2'></div>
-                    <div class="seat" id='E3'></div>
-                    <div class="seat" id='E4'></div>
-                    <div class="seat" id='E5'></div>
-                    <div class="seat" id='E6'></div>
-                    <div class="seat" id='E7'></div>
-                    <div class="seat" id='E8'></div>
+                    E &nbsp;
+                    <div class="seat <?php echo ($seatingmap[32]=='0' ? '0':'occupied'); ?>" id='E1'></div>
+                    <div class="seat <?php echo ($seatingmap[33]=='0' ? '0':'occupied'); ?>" id='E2'></div>
+                    <div class="seat <?php echo ($seatingmap[34]=='0' ? '0':'occupied'); ?>" id='E3'></div>
+                    <div class="seat <?php echo ($seatingmap[35]=='0' ? '0':'occupied'); ?>" id='E4'></div>
+                    <div class="seat <?php echo ($seatingmap[36]=='0' ? '0':'occupied'); ?>" id='E5'></div>
+                    <div class="seat <?php echo ($seatingmap[37]=='0' ? '0':'occupied'); ?>" id='E6'></div>
+                    <div class="seat <?php echo ($seatingmap[38]=='0' ? '0':'occupied'); ?>" id='E7'></div>
+                    <div class="seat <?php echo ($seatingmap[39]=='0' ? '0':'occupied'); ?>" id='E8'></div>
                 </div>
-
                 <div class="row">
-                    6 &nbsp;
-                    <div class="seat" id='F1'></div>
-                    <div class="seat" id='F2'></div>
-                    <div class="seat" id='F3'></div>
-                    <div class="seat" id='F4'></div>
-                    <div class="seat" id='F5'></div>
-                    <div class="seat" id='F6'></div>
-                    <div class="seat" id='F7'></div>
-                    <div class="seat" id='F8'></div>
+                    F &nbsp;
+                    <div class="seat <?php echo ($seatingmap[40]=='0' ? '0':'occupied'); ?>" id='F1'></div>
+                    <div class="seat <?php echo ($seatingmap[41]=='0' ? '0':'occupied'); ?>" id='F2'></div>
+                    <div class="seat <?php echo ($seatingmap[42]=='0' ? '0':'occupied'); ?>" id='F3'></div>
+                    <div class="seat <?php echo ($seatingmap[43]=='0' ? '0':'occupied'); ?>" id='F4'></div>
+                    <div class="seat <?php echo ($seatingmap[44]=='0' ? '0':'occupied'); ?>" id='F5'></div>
+                    <div class="seat <?php echo ($seatingmap[45]=='0' ? '0':'occupied'); ?>" id='F6'></div>
+                    <div class="seat <?php echo ($seatingmap[46]=='0' ? '0':'occupied'); ?>" id='F7'></div>
+                    <div class="seat <?php echo ($seatingmap[47]=='0' ? '0':'occupied'); ?>" id='F8'></div>
                 </div>
                 </div>
 
@@ -238,5 +277,7 @@ if (isset($_POST) and count($_POST)>0){
           </div>
         </div>
      <div class="footer">&copy;2021 EECinema Pte Ltd. All rights reserved.</div>
+     
     </body>
+    
 </html>
